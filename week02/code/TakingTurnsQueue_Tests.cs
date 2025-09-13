@@ -12,6 +12,11 @@ public class TakingTurnsQueueTests
     // run until the queue is empty
     // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, Sue, Tim, Tim
     // Defect(s) Found: 
+
+
+    /*Emma: This test failed because it's sending the wroung person. 
+    Here's the error message:  TestTakingTurnsQueue_FiniteRepetition (1ms): Error Message: Assert.AreEqual failed. Expected:<Bob>. Actual:<Sue>.  
+    Basicly: The queue is returning the last person added (Sue) instead of the first person, Bob, indicating a LIFO instead of FIFO*/
     public void TestTakingTurnsQueue_FiniteRepetition()
     {
         var bob = new Person("Bob", 2);
@@ -44,6 +49,11 @@ public class TakingTurnsQueueTests
     // After running 5 times, add George with 3 turns.  Run until the queue is empty.
     // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, George, Sue, Tim, George, Tim, George
     // Defect(s) Found: 
+
+
+    /*Emma: This one also seems to be getting thr wrong person, as noted here:  
+    TestTakingTurnsQueue_AddPlayerMidway (< 1ms): Error Message: Assert.AreEqual failed. Expected:<Bob>. Actual:<Sue>.
+     It's expected to be Bob, but the queue returned Sue. This indicates a LIFO behavior.*/
     public void TestTakingTurnsQueue_AddPlayerMidway()
     {
         var bob = new Person("Bob", 2);
@@ -86,6 +96,9 @@ public class TakingTurnsQueueTests
     // Run 10 times.
     // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, Sue, Tim, Tim
     // Defect(s) Found: 
+
+
+    /*Emma: Acctually, they all seem to be getting the wroung person.*/
     public void TestTakingTurnsQueue_ForeverZero()
     {
         var timTurns = 0;
@@ -112,11 +125,18 @@ public class TakingTurnsQueueTests
         Assert.AreEqual(timTurns, infinitePerson.Turns, "People with infinite turns should not have their turns parameter modified to a very big number. A very big number is not infinite.");
     }
 
-    [TestMethod]
+    [TestMethod] 
     // Scenario: Create a queue with the following people and turns: Tim (Forever), Sue (3)
     // Run 10 times.
     // Expected Result: Tim, Sue, Tim, Sue, Tim, Sue, Tim, Tim, Tim, Tim
     // Defect(s) Found: 
+
+
+    /*
+        Emma: Accept 1, as seen in this message: 
+            Test summary: total: 7, failed: 6, succeeded: 1, skipped: 0, duration: 1.4s
+                Build failed with 6 error(s) in 4.4s
+    */
     public void TestTakingTurnsQueue_ForeverNegative()
     {
         var timTurns = -3;
@@ -144,6 +164,8 @@ public class TakingTurnsQueueTests
     // Scenario: Try to get the next person from an empty queue
     // Expected Result: Exception should be thrown with appropriate error message.
     // Defect(s) Found: 
+
+    /*Emma: This one is running correctly!*/
     public void TestTakingTurnsQueue_Empty()
     {
         var players = new TakingTurnsQueue();
