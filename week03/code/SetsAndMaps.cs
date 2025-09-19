@@ -55,17 +55,33 @@ public static string[] FindPairs(string[] words)
     /// </summary>
     /// <param name="filename">The name of the file to read</param>
     /// <returns>fixed array of divisors</returns>
-    public static Dictionary<string, int> SummarizeDegrees(string filename)
+public static Dictionary<string, int> SummarizeDegrees(string filename)
+{
+    var degrees = new Dictionary<string, int>();
+    foreach (var line in File.ReadLines(filename))
     {
-        var degrees = new Dictionary<string, int>();
-        foreach (var line in File.ReadLines(filename))
+        var fields = line.Split(",");
+        // Ensure there are at least 4 fields before accessing index 3
+        if (fields.Length > 3)
         {
-            var fields = line.Split(",");
-            // TODO Problem 2 - ADD YOUR CODE HERE
-        }
+            var degree = fields[3].Trim();
 
-        return degrees;
+            // Try to get the existing count. If it doesn't exist, the 'count' variable will be 0.
+            if (degrees.TryGetValue(degree, out var count))
+            {
+                // If it exists, increment the count.
+                degrees[degree] = count + 1;
+            }
+            else
+            {
+                // If it doesn't exist, add it with a count of 1.
+                degrees[degree] = 1;
+            }
+        }
     }
+
+    return degrees;
+}
 
     /// <summary>
     /// Determine if 'word1' and 'word2' are anagrams.  An anagram
@@ -85,8 +101,47 @@ public static string[] FindPairs(string[] words)
     /// </summary>
     public static bool IsAnagram(string word1, string word2)
     {
-        // TODO Problem 3 - ADD YOUR CODE HERE
-        return false;
+        // Standardize the strings: convert to lowercase and remove spaces
+        word1 = new string(word1.ToLower().Replace(" ", "").ToCharArray());
+        word2 = new string(word2.ToLower().Replace(" ", "").ToCharArray());
+
+        // Check lengths
+        if (word1.Length != word2.Length)
+        {
+            return false;
+        }
+
+        // Use a dictionary for counting characters in the first string
+        var charCounts = new Dictionary<char, int>();
+        foreach (var c in word1)
+        {
+            if (charCounts.ContainsKey(c))
+            {
+                charCounts[c]++;
+            }
+            else
+            {
+                charCounts[c] = 1;
+            }
+        }
+
+        // Compare with the second string
+        foreach (var c in word2)
+        {
+            if (!charCounts.ContainsKey(c))
+            {
+                return false;
+            }
+
+            charCounts[c]--;
+            if (charCounts[c] < 0)
+            {
+                return false;
+            }
+        }
+
+        // Final check: ensure all counts are zero
+        return charCounts.Values.All(count => count == 0);
     }
 
     /// <summary>
