@@ -19,11 +19,30 @@ public static class SetsAndMaps
     /// that there were no duplicates) and therefore should not be returned.
     /// </summary>
     /// <param name="words">An array of 2-character words (lowercase, no duplicates)</param>
-    public static string[] FindPairs(string[] words)
+public static string[] FindPairs(string[] words)
+{
+    var seenWords = new HashSet<string>();
+    var result = new List<string>();
+
+    foreach (var word in words)
     {
-        // TODO Problem 1 - ADD YOUR CODE HERE
-        return [];
+        var reversedWord = new string(word.Reverse().ToArray());
+
+        if (seenWords.Contains(reversedWord))
+        {
+            // Found a symmetric pair. Add to results and remove from the set.
+            result.Add($"{reversedWord} & {word}");
+            seenWords.Remove(reversedWord);
+        }
+        else
+        {
+            // No symmetric pair found yet, so add the current word to the set.
+            seenWords.Add(word);
+        }
     }
+
+    return result.ToArray();
+}
 
     /// <summary>
     /// Read a census file and summarize the degrees (education)
